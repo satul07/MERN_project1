@@ -13,7 +13,7 @@ const getGoals = asyncHandler(async (req, res) => {
 // @route   POST /api/goals
 // @access  Private
 const createGoal = asyncHandler(async (req, res) => {
-    if(req.body.Text == null)
+    if(!req.body.text)
     {
         // res.status(400).json({'Message' : 'Please add a text field'})
         res.status(400)
@@ -22,7 +22,7 @@ const createGoal = asyncHandler(async (req, res) => {
     // else 
     //     console.log(req.body)
     const goal = await Goal.create({
-        text : req.body.Text,
+        text : req.body.text,
         user : req.user.id,
     })
     res.status(200).json(goal) 
@@ -39,17 +39,17 @@ const updateGoal = asyncHandler(async (req, res) => {
         throw new Error('Goal not found')
     }
 
-    const user = await User.findById(req.user.id)
+    // const user = await User.findById(req.user.id)
 
     //check for user
-    if(!user)
+    if(!req.user)
     {
         res.status(401)
         throw new Error('User not found')
     }
 
     //checking that logged in user is the goal user
-    if(goal.user.toString() !== user.id)
+    if(goal.user.toString() !== req.user.id)
     {
         res.status(401)
         throw new Error('User not authorized')
@@ -71,17 +71,17 @@ const deleteGoal = asyncHandler(async (req, res) => {
         throw new Error('Goal not found')
     }
 
-    const user = await User.findById(req.user.id)
+    // const user = await User.findById(req.user.id)
 
     //check for user
-    if(!user)
+    if(!req.user)
     {
         res.status(401)
         throw new Error('User not found')
     }
 
     //checking that logged in user is the goal user
-    if(goal.user.toString() !== user.id)
+    if(goal.user.toString() !== req.user.id)
     {
         res.status(401)
         throw new Error('User not authorized')
