@@ -6,7 +6,7 @@ const {errorHandler} = require('./middleware/errorMiddleware')
 const connectDB = require('./config/db')
 const port = process.env.PORT || 5000
 
-// connectDB()
+connectDB()
 const app = express()
 
 app.use(express.json())
@@ -15,7 +15,7 @@ app.use(express.urlencoded({extended: false}))
 app.use('/api/goals', require('./routes/goalRoutes'))
 app.use('/api/users', require('./routes/userRoutes'))
 
-//Serve frontent
+//Serve frontend
 if(process.env.NODE_ENV === 'production'){
     app.use(express.static(path.join(__dirname, '../frontend/build')))
 
@@ -33,11 +33,11 @@ else{
 
 app.use(errorHandler) //this will override the default express error handler
 
-// app.listen(port, () => console.log(`Server started on port ${port}`))
+app.listen(port, () => console.log(`Server started on port ${port}`))
 
-connectDB().then(() => {
-    console.log("db connected");
-    app.listen(port, () => {
-        console.log("listening for requests");
-    })
-})
+// connectDB().then(() => {
+//     console.log("db connected");
+//     app.listen(port, () => {
+//         console.log("listening for requests");
+//     })
+// })
